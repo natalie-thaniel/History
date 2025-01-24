@@ -35,6 +35,23 @@
       border-left: 2px solid #ccc;
     }
 
+    .gold-container {
+      margin-top: 20px;
+      padding: 20px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      background-color: #f9f9f9;
+    }
+
+    .gold-counter {
+      margin-bottom: 10px;
+    }
+
+    .gold-counter span {
+      margin: 0 10px;
+      font-size: 18px;
+    }
+
     button {
       padding: 10px 20px;
       font-size: 16px;
@@ -66,11 +83,27 @@
       <div id="trivia-container"></div>
     </div>
 
-    <!-- Right container for action cards -->
+    <!-- Right container for action cards and gold counters -->
     <div class="right-container">
       <button id="get-land-card-btn">Draw Land Card</button>
       <button id="get-water-card-btn">Draw Water Card</button>
       <div id="action-container"></div>
+
+      <!-- Gold Counters -->
+      <div class="gold-container">
+        <div class="gold-counter">
+          <h3>Player 1 Gold:</h3>
+          <button id="p1-decrement">-</button>
+          <span id="player1-gold">0</span>
+          <button id="p1-increment">+</button>
+        </div>
+        <div class="gold-counter">
+          <h3>Player 2 Gold:</h3>
+          <button id="p2-decrement">-</button>
+          <span id="player2-gold">0</span>
+          <button id="p2-increment">+</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -120,11 +153,27 @@
       { type: "Death", weight: 8 }
     ];
 
-    const getQuestionBtn = document.getElementById("get-question-btn");
-    const getLandCardBtn = document.getElementById("get-land-card-btn");
-    const getWaterCardBtn = document.getElementById("get-water-card-btn");
     const triviaContainer = document.getElementById("trivia-container");
     const actionContainer = document.getElementById("action-container");
+
+    const player1Gold = document.getElementById("player1-gold");
+    const player2Gold = document.getElementById("player2-gold");
+
+    document.getElementById("p1-increment").addEventListener("click", () => {
+      player1Gold.textContent = parseInt(player1Gold.textContent) + 1;
+    });
+
+    document.getElementById("p1-decrement").addEventListener("click", () => {
+      player1Gold.textContent = Math.max(0, parseInt(player1Gold.textContent) - 1);
+    });
+
+    document.getElementById("p2-increment").addEventListener("click", () => {
+      player2Gold.textContent = parseInt(player2Gold.textContent) + 1;
+    });
+
+    document.getElementById("p2-decrement").addEventListener("click", () => {
+      player2Gold.textContent = Math.max(0, parseInt(player2Gold.textContent) - 1);
+    });
 
     // Utility to select a weighted random card
     const getRandomCard = (cards) => {
@@ -139,7 +188,6 @@
       }
     };
 
-    // Create trivia question card
     const createTriviaCard = (triviaItem) => {
       triviaContainer.innerHTML = "";
       const card = document.createElement("div");
@@ -165,7 +213,6 @@
       triviaContainer.appendChild(card);
     };
 
-    // Create card for action
     const createActionCard = (cardType, cardCategory) => {
       actionContainer.innerHTML = "";
       const card = document.createElement("div");
@@ -174,20 +221,19 @@
       actionContainer.appendChild(card);
     };
 
-    // Event Listeners
-    getQuestionBtn.addEventListener("click", () => {
-      const randomTrivia = trivia[Math.floor(Math.random() * trivia.length)];
-      createTriviaCard(randomTrivia);
-    });
-
-    getLandCardBtn.addEventListener("click", () => {
+    document.getElementById("get-land-card-btn").addEventListener("click", () => {
       const landCard = getRandomCard(landCards);
       createActionCard(landCard, "Land");
     });
 
-    getWaterCardBtn.addEventListener("click", () => {
+    document.getElementById("get-water-card-btn").addEventListener("click", () => {
       const waterCard = getRandomCard(waterCards);
       createActionCard(waterCard, "Water");
+    });
+
+    document.getElementById("get-question-btn").addEventListener("click", () => {
+      const randomTrivia = trivia[Math.floor(Math.random() * trivia.length)];
+      createTriviaCard(randomTrivia);
     });
   </script>
 </body>
