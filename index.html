@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canadian Trivia</title>
+  <link rel="icon" type="image/x-icon" href="download-removebg-preview (27).png">
+  <style>
+    body {
+      font-family: Century, sans-serif;
+      margin: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: blue;
+    }
+
+    .main-container {
+      display: flex;
+      justify-content: space-between;
+      margin: 0;
+      padding: 0;
+    }
+
+    .left-container,
+    .right-container {
+      width: 45%; /* Each side takes up nearly half the space */
+      padding: 20px;
+    }
+
+    .right-container {
+      align-items: flex-start;
+      border-left: 2px solid #ccc;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-bottom: 20px;
+      cursor: pointer;
+    }
+
+    .card {
+      padding: 20px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      background-color: #f9f9f9;
+      margin-top: 20px;
+    }
+
+    .card p {
+      margin: 0 0 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Canadian Trivia</h1>
+  <hr>
+  <div class="main-container">
+    <!-- Left container for trivia -->
+    <div class="left-container">
+      <button id="get-question-btn">Get a Trivia Question</button>
+      <div id="trivia-container"></div>
+    </div>
+
+    <!-- Right container for action cards -->
+    <div class="right-container">
+      <button id="get-land-card-btn">Draw Land Card</button>
+      <button id="get-water-card-btn">Draw Water Card</button>
+      <div id="action-container"></div>
+    </div>
+  </div>
+
+  <script>
+    const trivia = [
+      { question: "True or False? The Charlottetown Conference of 1864 was originally intended to discuss Maritime Union.", answer: "True" },
+      { question: "True or False? British Columbia joined Confederation in 1871 after being promised a railway connection to the east.", answer: "True" },
+      { question: "True or False? Canada became fully independent from Britain after the BNA Act of 1867.", answer: "False" },
+      { question: "What year did the Province of Canada officially become the Dominion of Canada?", answer: "1867" },
+      { question: "Which territory was purchased from the Hudson’s Bay Company in 1870 to expand Canada?", answer: "Rupert's Land" },
+      { question: "What was the main reason British Columbia agreed to join Confederation in 1871?", answer: "Canada promised to build a railway connecting it to the rest of the country." },
+      { question: "What was the name of the agreement in 1818 that set the 49th parallel as the border between Canada and the United States?", answer: "The Treaty of 1818" },
+      { question: "Who was the leader of the Patriots during the Lower Canada Rebellion of 1837?", answer: "Louis-Joseph Papineau" },
+      { question: "What is the name of the first female Canadian doctor who graduated in 1867?", answer: "Emily Stowe" },
+      { question: "Which region of Canada experienced rapid settlement during the late 19th century due to government-promoted immigration?", answer: "The Prairies (Alberta, Saskatchewan, Manitoba)" },
+      { question: "What famous battle during World War I is often considered a defining moment for Canadian identity?", answer: "The Battle of Vimy Ridge" },
+      { question: "When did Canada officially become a country?", answer: "July 1, 1867" },
+      { question: "What were the first 4 Canadian provinces?", answer: "Ontario, Quebec, New Brunswick, Nova Scotia" },
+      { question: "What act offered free homesteads to settlers in the Prairies?", answer: "Dominion Lands Act" },
+      { question: "What treaty, signed in 1854, reduced tariffs between Britain and the US?", answer: "Reciprocity Treaty" },
+      { question: "What term refers to trade between the colonies of British North America?", answer: "Intercolonial trade" },
+      { question: "Who was Canada’s first Prime Minister?", answer: "Sir John A. MacDonald" },
+      { question: "What year did Manitoba join Confederation?", answer: "1870" },
+      { question: "What role did Louis Riel play in Canadian history?", answer: "He led the Red River and North-West Rebellions and is considered the founder of Manitoba." },
+      { question: "What was the name of the treaty signed in 1871 to establish peace between the government and Indigenous Peoples in parts of western Canada?", answer: "Treaty 1" },
+      { question: "Why was the Klondike Gold Rush of 1896 significant to Canada?", answer: "It brought an influx of settlers and economic activity to the Yukon Territory." },
+      { question: "What event led to the formation of the North-West Mounted Police (now the RCMP) in 1873?", answer: "The Cypress Hills Massacre" },
+      { question: "What Canadian province was created in 1905 by splitting the North-West Territories?", answer: "Alberta and Saskatchewan" }
+    ];
+
+    const landCards = [
+      { type: "Land Forward one", weight: 8 },
+      { type: "Forward two", weight: 4 },
+      { type: "Gold +1", weight: 2 },
+      { type: "Gold +2", weight: 2 },
+      { type: "Nothing", weight: 6 },
+      { type: "Backwards one", weight: 6 },
+      { type: "Death (Reset)", weight: 4 }
+    ];
+
+    const waterCards = [
+      { type: "Water Forward one", weight: 8 },
+      { type: "Forward two", weight: 6 },
+      { type: "Forward three", weight: 2 },
+      { type: "Nothing", weight: 4 },
+      { type: "Backwards one", weight: 4 },
+      { type: "Death", weight: 8 }
+    ];
+
+    const getQuestionBtn = document.getElementById("get-question-btn");
+    const getLandCardBtn = document.getElementById("get-land-card-btn");
+    const getWaterCardBtn = document.getElementById("get-water-card-btn");
+    const triviaContainer = document.getElementById("trivia-container");
+    const actionContainer = document.getElementById("action-container");
+
+    // Utility to select a weighted random card
+    const getRandomCard = (cards) => {
+      const totalWeight = cards.reduce((sum, card) => sum + card.weight, 0);
+      let random = Math.random() * totalWeight;
+
+      for (let card of cards) {
+        if (random < card.weight) {
+          return card.type;
+        }
+        random -= card.weight;
+      }
+    };
+
+    // Create trivia question card
+    const createTriviaCard = (triviaItem) => {
+      triviaContainer.innerHTML = "";
+      const card = document.createElement("div");
+      card.classList.add("card");
+
+      const questionText = document.createElement("p");
+      questionText.textContent = triviaItem.question;
+      card.appendChild(questionText);
+
+      const answerText = document.createElement("p");
+      answerText.textContent = triviaItem.answer;
+      answerText.style.display = "none";
+      card.appendChild(answerText);
+
+      const showAnswerBtn = document.createElement("button");
+      showAnswerBtn.textContent = "Show Answer";
+      showAnswerBtn.addEventListener("click", () => {
+        answerText.style.display = "block";
+        showAnswerBtn.style.display = "none";
+      });
+      card.appendChild(showAnswerBtn);
+
+      triviaContainer.appendChild(card);
+    };
+
+    // Create card for action
+    const createActionCard = (cardType, cardCategory) => {
+      actionContainer.innerHTML = "";
+      const card = document.createElement("div");
+      card.classList.add("card");
+      card.textContent = `${cardCategory} Action Card: ${cardType}`;
+      actionContainer.appendChild(card);
+    };
+
+    // Event Listeners
+    getQuestionBtn.addEventListener("click", () => {
+      const randomTrivia = trivia[Math.floor(Math.random() * trivia.length)];
+      createTriviaCard(randomTrivia);
+    });
+
+    getLandCardBtn.addEventListener("click", () => {
+      const landCard = getRandomCard(landCards);
+      createActionCard(landCard, "Land");
+    });
+
+    getWaterCardBtn.addEventListener("click", () => {
+      const waterCard = getRandomCard(waterCards);
+      createActionCard(waterCard, "Water");
+    });
+  </script>
+</body>
+
+</html>
