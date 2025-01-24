@@ -36,11 +36,12 @@
     }
 
     .gold-container {
-      margin-top: 20px;
+      margin-top: 40px;
       padding: 20px;
       border: 2px solid #ccc;
       border-radius: 10px;
       background-color: #f9f9f9;
+      text-align: center;
     }
 
     .gold-counter {
@@ -83,29 +84,30 @@
       <div id="trivia-container"></div>
     </div>
 
-    <!-- Right container for action cards and gold counters -->
+    <!-- Right container for action cards -->
     <div class="right-container">
       <button id="get-land-card-btn">Draw Land Card</button>
       <button id="get-water-card-btn">Draw Water Card</button>
       <div id="action-container"></div>
-
-    <!-- Gold Counters -->
-    <div class="gold-container">
-      <div class="gold-counter">
-        <h3>Player 1 Gold:</h3>
-        <button id="p1-decrement">-</button>
-        <span id="player1-gold">0</span>
-        <button id="p1-increment">+</button>
-      </div>
-      <div class="gold-counter">
-        <h3>Player 2 Gold:</h3>
-        <button id="p2-decrement">-</button>
-        <span id="player2-gold">0</span>
-        <button id="p2-increment">+</button>
-      </div>
     </div>
   </div>
-</div>
+
+  <!-- Gold Counters Section -->
+  <div class="gold-container">
+    <h2>Gold Counters</h2>
+    <div class="gold-counter">
+      <h3>Player 1 Gold:</h3>
+      <button id="p1-decrement">-</button>
+      <span id="player1-gold">0</span>
+      <button id="p1-increment">+</button>
+    </div>
+    <div class="gold-counter">
+      <h3>Player 2 Gold:</h3>
+      <button id="p2-decrement">-</button>
+      <span id="player2-gold">0</span>
+      <button id="p2-increment">+</button>
+    </div>
+  </div>
 
   <script>
     const trivia = [
@@ -175,7 +177,6 @@
       player2Gold.textContent = Math.max(0, parseInt(player2Gold.textContent) - 1);
     });
 
-    // Utility to select a weighted random card
     const getRandomCard = (cards) => {
       const totalWeight = cards.reduce((sum, card) => sum + card.weight, 0);
       let random = Math.random() * totalWeight;
