@@ -137,22 +137,36 @@
     ];
 
     const landCards = [
-      { type: "Land Forward one", weight: 8 },
-      { type: "Forward two", weight: 4 },
+      { type: "Forward 1, The terrain becomes a frosty meadow, long but accessible. You continue pushing forward. ", weight: 2},
+      { type: "Forward 1, You push forward in the worsening conditions, motivated by the thought of riches. ", weight: 2},
+      { type: "Forward 1, You rest and set camp for the night. The next day, you are recharged and willing to continue pushing forward. ", weight: 2},
+      { type: "Forward 1, The weather works in your favor, helping you push through the wilderness. ", weight: 2},
+
+      { type: "Forward 2, You set camp near a river full of salmon. You return full of energy on your trip, ready to trek for longer. ", weight: 2},
+      { type: "Forward 2, You spot a blazed tree, recognizing it as a trail marker. Following its direction, you advance more quickly. ", weight: 2},
+
       { type: "Gold +1", weight: 2 },
       { type: "Gold +2", weight: 2 },
-      { type: "Nothing", weight: 6 },
-      { type: "Backwards one", weight: 6 },
-      { type: "Death (Reset)", weight: 4 }
+      
+      { type: "Nothing, An unexpected storm halts your progress. You set camp and wait for it to pass. ", weight: 2 },
+      { type: "Nothing, One morning, you feel too exhausted to continue. You spend the rest of the day staying at camp, resting. ", weight: 2 },
+      { type: "Nothing, You sprain your ankle from hiking excessively. You set camp and help it heal. ", weight: 2 },
+
+      { type: "Backward 1, A storm blizzard has blocks your path. It forces you to retreat to safer lands, which is only backwards. ", weight: 2 },
+      { type: "Backward 1, Your compass starts being incorrect due to the freezing cold. You head the wrong direction, back south. ", weight: 2 },
+      { type: "Backward 1, You spot a blazed tree, recognizing it as a trail marker. You misread it and  go in the wrong direction, backwards. ", weight: 2 },
+      
+      { type: "Death (Reset), Hypothermia drains your strength and you fail to continue. Restart this pawn either in Alberta or Washington. ", weight: 2 },
+      { type : "Death (Reset), Your exhaustion, hunger, and cold overwhelm you. Restart this pawn where it started. ", weight: 2 },
     ];
 
     const waterCards = [
-      { type: "Water Forward one", weight: 8 },
-      { type: "Forward two", weight: 6 },
-      { type: "Forward three", weight: 2 },
-      { type: "Nothing", weight: 4 },
-      { type: "Backwards one", weight: 4 },
-      { type: "Death", weight: 8 }
+      { type: "Forward 1, You press forward over the raging waters, motivated by the thought of riches. ", weight: 8 },
+      { type: "Forward 2, The current works in your favour; your distance is longer today. ", weight: 6 },
+      { type: "Forward 3, You stumble upon a hidden channel which moves you exponentially faster than the others. ", weight: 2 },
+      { type: "Nothing, You hit a stagnant section of the river. With no current you remain in place.", weight: 4 },
+      { type: "Backwards 1, A dense fog clouds your vision. You steer off course and drift backward.", weight: 4 },
+      { type: "Death (Reset), A strong current hits you as you press through a storm, throwing you off your ship. Restart this pawn where it started.", weight: 8 }
     ];
 
     const triviaContainer = document.getElementById("trivia-container");
